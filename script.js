@@ -1,41 +1,6 @@
-const cards = document.querySelectorAll('.card');
+const menu=document.getElementById('menu'),nav=document.getElementById('nav');menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'✕':'☰'});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));document.getElementById('year').textContent=new Date().getFullYear();const progress=document.getElementById('progress');function updateProgress(){const root=document.documentElement;const scrollable=root.scrollHeight-root.clientHeight;progress.style.transform=`scaleX(${scrollable>0?root.scrollTop/scrollable:0})`}addEventListener('scroll',updateProgress,{passive:true});updateProgress();
 
-const reducedMotion = window.matchMedia(
-  '(prefers-reduced-motion: reduce)'
-);
-
-cards.forEach(card => {
-  const resetTilt = () => {
-    card.style.transform = 'rotateX(0) rotateY(0) scale(1)';
-  };
-
-  card.addEventListener('pointermove', event => {
-    if (event.pointerType !== 'mouse' || reducedMotion.matches) {
-      resetTilt();
-      return;
-    }
-
-    // Measure the grid and the card's untransformed layout position.
-    const grid = card.parentElement;
-    const gridRect = grid.getBoundingClientRect();
-
-    const centerX = card.offsetWidth / 2;
-    const centerY = card.offsetHeight / 2;
-
-    const x = event.clientX - gridRect.left - card.offsetLeft;
-    const y = event.clientY - gridRect.top - card.offsetTop;
-
-    const clamp = value => Math.max(-1, Math.min(1, value));
-
-    const rotateX = clamp((y - centerY) / centerY) * -8;
-    const rotateY = clamp((x - centerX) / centerX) * 8;
-
-    card.style.transform =
-      `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-  });
-
-  card.addEventListener('pointerleave', resetTilt);
-  card.addEventListener('pointercancel', resetTilt);
-
-  reducedMotion.addEventListener('change', resetTilt);
-});
+// Lightweight interactive golden particle atmosphere; respects reduced motion.
+(()=>{const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,canvas=document.getElementById('atmosphere');if(!canvas)return;const ctx=canvas.getContext('2d');if(!ctx)return;let w,h,points=[];const resize=()=>{w=canvas.width=Math.min(document.documentElement.clientWidth,1920)*Math.min(devicePixelRatio||1,2);h=canvas.height=1050*Math.min(devicePixelRatio||1,2);const count=Math.min(85,Math.floor(w/17));points=Array.from({length:count},(_,i)=>({x:(i*73.17%count)/count*w,y:((i*113.13)%count)/count*h,r:(i%3+1)*.7,s:(i%5+1)*.035}))};resize();window.addEventListener('resize',resize,{passive:true});let frame=0;const paint=()=>{ctx.clearRect(0,0,w,h);ctx.fillStyle='#deb66e';ctx.strokeStyle='#ba8d4850';for(let i=0;i<points.length;i++){const a=points[i];ctx.globalAlpha=.16+(i%5)*.095;ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,Math.PI*2);ctx.fill();if(!reduce)a.y=(a.y+a.s*(devicePixelRatio||1))%h;for(let j=i+1;j<points.length;j++){const b=points[j],dx=a.x-b.x,dy=a.y-b.y;if(dx*dx+dy*dy<(w*.09)**2){ctx.globalAlpha=.045;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}ctx.globalAlpha=1;if(!reduce)requestAnimationFrame(paint)};paint()})();
+// Reveal on scroll while keeping content fully visible without JS or animation support.
+if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){const targets=document.querySelectorAll('.section-heading,.project-card,.skill-card,.timeline-item,.about-layout,.stats>div');const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})},{threshold:.07});targets.forEach(el=>{el.classList.add('reveal');observer.observe(el)})}
