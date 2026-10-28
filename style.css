@@ -41,3 +41,25 @@ html{scroll-padding-top:82px}body{background:var(--bg);color:var(--ink);font-fam
 .project-card:focus-within,.btn:focus-visible,.navbar a:focus-visible{outline:2px solid #ffdfa3;outline-offset:4px}
 @media(max-width:900px){.hero-visual{min-height:560px}.portrait-ring{height:510px;width:min(430px,85vw)}}
 @media(max-width:650px){.hero-visual{min-height:465px}.portrait-ring{height:405px;width:min(310px,79vw)}.hero-visual .orbit-outer{width:350px;height:350px}.hero-visual .orbit-inner{width:300px;height:300px}.floating{letter-spacing:.06em}.badge-two{left:-1%}.badge-three{right:-1%}}
+
+
+/* MOBILE PORTRAIT UPDATE — desktop layout remains unchanged. */
+.mobile-portrait{display:none}
+@media (max-width:650px){
+  .hero{display:flex;flex-direction:column;align-items:stretch;gap:0;padding-top:34px;padding-bottom:52px}
+  .hero-content{order:1;width:100%;min-width:0}
+  .hero-visual{display:none!important}
+  .hero .hello{margin-top:27px}
+  .hero h1{font-size:clamp(42px,10.2vw,60px);line-height:1.1;margin-bottom:16px}
+  .mobile-portrait{display:block;position:relative;isolation:isolate;width:min(248px,76vw);height:min(248px,76vw);margin:2px auto 27px;border:1px solid #edc57788;border-radius:45% 45% 20px 20px;overflow:hidden;background:#18130c;box-shadow:0 0 0 7px #cfa85c0b,0 0 53px #ca984e47,0 22px 44px #000a}
+  .mobile-portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 23%;filter:contrast(1.01) saturate(.97)}
+  .hero h2{font-size:clamp(29px,7.8vw,39px);line-height:1.15;margin-bottom:17px}
+  .hero .intro{font-size:14px;line-height:1.7;margin-bottom:0}
+  .hero .actions{display:flex;gap:11px;margin:24px 0 20px}
+  .hero .btn{min-height:49px;padding:12px 16px;font-size:10px;letter-spacing:.07em}
+  .hero .social{gap:15px;flex-wrap:wrap}
+}
+@media(max-width:370px){
+  .hero .actions{flex-direction:column;align-items:flex-start}
+  .mobile-portrait{width:215px;height:215px}
+}
